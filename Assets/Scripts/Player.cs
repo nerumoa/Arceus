@@ -11,10 +11,9 @@ public class Player : MonoBehaviour
     float jumpframe = 0;
     float step = 500;
     float stepstart = 0;
-    float time = 0;
     float stepstarttime = 0;
     float cooltimecount = 0;
-    float cooltime = 3;
+    float cooltime = 120;
     private Rigidbody2D rb;
     private bool isGround = true;
 
@@ -28,25 +27,25 @@ public class Player : MonoBehaviour
     void Update()
     {
         //クールタイム-------------------
-        time += Time.deltaTime;
         if (stepstart == 1)
         {
-            stepstarttime = Time.deltaTime;
+            stepstarttime = Time.frameCount;
             stepstart = 2;
 
         }
         if (stepstart == 2)
         {
-            if (cooltimecount <= cooltime){
-                cooltimecount = time - stepstarttime;
+            if (cooltimecount <= cooltime)
+            {
+                cooltimecount = Time.frameCount - stepstarttime;
             }
             else
             {
-                cooltimecount = 0;
                 stepstart = 0;
             }
 
         }
+
         //-------------------------------
         //左右移動-----------------------
         if (Input.GetKey(KeyCode.D))
@@ -55,6 +54,7 @@ public class Player : MonoBehaviour
             //ステップ-------------------
             if (Input.GetKeyDown(KeyCode.LeftShift) && stepstart == 0)
             {
+                cooltimecount = 0;
                 rb.AddForce(new Vector3(step, 0, 0));
                 stepstart = 1;
 
