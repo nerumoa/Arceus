@@ -41,20 +41,15 @@ public class Player : MonoBehaviour
                 rb.AddForce(new Vector3(0, upForce, 0));
 
                 jumpstart = Time.frameCount;
-                Debug.Log("jumpstart");
-                Debug.Log(jumpstart);
-
-
+                Debug.Log("jumpstart: "+ jumpstart);
 
             }
             if (Input.GetKeyUp(KeyCode.Space))
             {
                 jumpend = Time.frameCount;
-                Debug.Log("jumpend");
-                Debug.Log(jumpend);
+                Debug.Log("jumpend: "+ jumpend);
                 jumpframe = jumpend - jumpstart;
-                Debug.Log("jumpframe");
-                Debug.Log(jumpframe);
+                Debug.Log("jumpframe: "+ jumpframe);
 
                 if (jumpframe <= 8)
                 {
