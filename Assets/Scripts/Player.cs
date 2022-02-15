@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     float jumpstart = 0;
     float jumpend = 0;
     float jumpframe = 0;
-    float step = 500;
+    float step = 800;
     float stepstart = 0;
     float stepstarttime = 0;
     float cooltimecount = 0;
@@ -64,6 +64,15 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             transform.position -= new Vector3(speed, 0, 0) * Time.deltaTime;
+            //ステップ-------------------
+            if (Input.GetKeyDown(KeyCode.LeftShift) && stepstart == 0)
+            {
+                cooltimecount = 0;
+                rb.AddForce(new Vector3(-step, 0, 0));
+                stepstart = 1;
+
+            }
+            //---------------------------
 
         }
         //-------------------------------
