@@ -24,11 +24,7 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    /*private void Update()
-    {
-        cooltime += Time.deltaTime;
 
-    }*/
     void Update()
     {
         //クールタイム-------------------
