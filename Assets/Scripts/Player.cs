@@ -31,6 +31,7 @@ public class Player : MonoBehaviour
     }*/
     void Update()
     {
+        //クールタイム-------------------
         time += Time.deltaTime;
         if (stepstart == 1)
         {
@@ -50,18 +51,19 @@ public class Player : MonoBehaviour
             }
 
         }
-
+        //-------------------------------
         //左右移動-----------------------
         if (Input.GetKey(KeyCode.D))
         {
             transform.position += new Vector3(speed, 0, 0) * Time.deltaTime;
-
+            //ステップ-------------------
             if (Input.GetKeyDown(KeyCode.LeftShift) && stepstart == 0)
             {
                 rb.AddForce(new Vector3(step, 0, 0));
                 stepstart = 1;
 
             }
+            //---------------------------
         }
         if (Input.GetKey(KeyCode.A))
         {
