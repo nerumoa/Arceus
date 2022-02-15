@@ -9,6 +9,12 @@ public class Player : MonoBehaviour
     float jumpstart = 0;
     float jumpend = 0;
     float jumpframe = 0;
+    float step = 500;
+    float stepstart = 0;
+    float time = 0;
+    float stepstarttime = 0;
+    float cooltimecount = 0;
+    float cooltime = 3;
     private Rigidbody2D rb;
     private bool isGround = true;
 
@@ -18,19 +24,52 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
+    /*private void Update()
+    {
+        cooltime += Time.deltaTime;
+
+    }*/
     void Update()
     {
+        time += Time.deltaTime;
+        if (stepstart == 1)
+        {
+            stepstarttime = Time.deltaTime;
+            stepstart = 2;
 
+        }
+        if (stepstart == 2)
+        {
+            if (cooltimecount <= cooltime){
+                cooltimecount = time - stepstarttime;
+            }
+            else
+            {
+                cooltimecount = 0;
+                stepstart = 0;
+            }
 
+        }
+
+        //左右移動-----------------------
         if (Input.GetKey(KeyCode.D))
         {
             transform.position += new Vector3(speed, 0, 0) * Time.deltaTime;
+
+            if (Input.GetKeyDown(KeyCode.LeftShift) && stepstart == 0)
+            {
+                rb.AddForce(new Vector3(step, 0, 0));
+                stepstart = 1;
+
+            }
         }
         if (Input.GetKey(KeyCode.A))
         {
             transform.position -= new Vector3(speed, 0, 0) * Time.deltaTime;
+
         }
+        //-------------------------------
+        //ジャンプ-----------------------
         if (isGround)
         {
             
@@ -60,9 +99,11 @@ public class Player : MonoBehaviour
             }
 
         }
+        //-------------------------------
 
 
     }
+    //接地判定---------------------------
     private void OnCollisionStay2D(Collision2D other)
     {
         if (other.gameObject.tag == "Ground")
@@ -71,5 +112,6 @@ public class Player : MonoBehaviour
             speed = 10;
         }
     }
+    //-----------------------------------
 
 }
