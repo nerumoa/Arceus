@@ -6,16 +6,30 @@ public class Bullet : MonoBehaviour
 {
     //移動スピード
     float speed = 10;
+    
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        //現在の位置を、現在の位置＋移動距離＊フレーム時間に上書きする
-        transform.position = transform.position + new Vector3(speed, speed, 0) * Time.deltaTime;
+        /*
+        if (Input.GetMouseButtonDown(0))
+        {
+            //弾の作成
+            GameObject clone = Instantiate(bullet, transform.position, Quaternion.identity);
+            // クリックした座標の取得（スクリーン座標からワールド座標に変換）
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+
+            // 向きの生成（Z成分の除去と正規化）
+            Vector3 shotForward = Vector3.Scale((mouseWorldPos - transform.position), new Vector3(1, 1, 0)).normalized;
+
+            // 弾に速度を与える
+            clone.GetComponent<Rigidbody2D>().velocity = shotForward * speed;
+        }
+        */
     }
 }
