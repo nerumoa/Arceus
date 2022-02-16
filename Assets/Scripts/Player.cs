@@ -16,11 +16,13 @@ public class Player : MonoBehaviour
     float cooltime = 120;
     private Rigidbody2D rb;
     private bool isGround = true;
+    private Animator anim = null;
 
     void Start()
     {
         Application.targetFrameRate = 60;
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
 
@@ -51,6 +53,8 @@ public class Player : MonoBehaviour
         if (Input.GetKey(KeyCode.D))
         {
             transform.position += new Vector3(speed, 0, 0) * Time.deltaTime;
+            transform.localScale = new Vector3(2, 2, 2);
+            anim.SetBool("walk", true);
             //ステップ-------------------
             if (Input.GetKeyDown(KeyCode.LeftShift) && stepstart == 0)
             {
@@ -61,9 +65,12 @@ public class Player : MonoBehaviour
             }
             //---------------------------
         }
-        if (Input.GetKey(KeyCode.A))
+
+        else if (Input.GetKey(KeyCode.A))
         {
             transform.position -= new Vector3(speed, 0, 0) * Time.deltaTime;
+            transform.localScale = new Vector3(-2, 2, 2);
+            anim.SetBool("walk", true);
             //ステップ-------------------
             if (Input.GetKeyDown(KeyCode.LeftShift) && stepstart == 0)
             {
@@ -74,6 +81,10 @@ public class Player : MonoBehaviour
             }
             //---------------------------
 
+        }
+        else
+        {
+            anim.SetBool("walk", false);
         }
         //-------------------------------
         //ジャンプ-----------------------
