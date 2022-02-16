@@ -53,7 +53,8 @@ public class PlayerMovement : MonoBehaviour
             jumpKeyLock = false;
         }
 
-        if (situation == Situation.FALL && HitGround()) {
+        if (situation == Situation.FALL) {
+            // && HitGround()
             situation = Situation.GROUND;
             jumpTimer = 0f;
             jumpKeyLock = true;
