@@ -4,6 +4,26 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] private ContactFilter2D ground = default;
+    [SerializeField] private ContactFilter2D ceiling = default;
+    bool isGround;
+    bool isCeiling;
+
+    float xRate;
+    [SerializeField] float speed = 8f;
+    bool isMove = false;
+
+    float jumpTimer = 0f;
+    const float jumpPower = 18f;
+    const float gravity = 120f;
+    bool jumpKey = false;
+    bool jumpKeyLock = false;
+
+
+    Rigidbody2D rb;
+    Vector2 vect;
+    Situation situation = Situation.GROUND;
+
     enum Situation
     {
         GROUND,
@@ -11,24 +31,10 @@ public class PlayerMovement : MonoBehaviour
         FALL
     }
 
-    float xRate;
-    [SerializeField] float speed = 50f;
-    bool isMove = false;
-    bool isStart = false;
-
-    float jumpTimer = 0f;
-    const float jumpPower = 17f;
-    const float gravity = 90f;
-    bool jumpKey = false;
-    bool jumpKeyLock = false;
-
-    Rigidbody2D rb;
-    Vector2 vect;
-    Situation situation = Situation.GROUND;
-
     // Start is called before the first frame update
     void Start()
     {
+        //Time.timeScale = 0.1f;
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -53,8 +59,14 @@ public class PlayerMovement : MonoBehaviour
             jumpKeyLock = false;
         }
 
-        if (situation == Situation.FALL) {
-            // && HitGround()
+        // Jump二度押しを出来ないようにする
+        // 二段ジャンプを参考にすれば良い？
+
+        isGround = rb.IsTouching(ground);
+        isCeiling = rb.IsTouching(ceiling);
+
+        // 地面と接触した場合
+        if (situation == Situation.FALL && isGround) {
             situation = Situation.GROUND;
             jumpTimer = 0f;
             jumpKeyLock = true;
@@ -63,21 +75,22 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        vect = Vector2.zero;
+        //vect = Vector2.zero;
 
         if (isMove) {
             vect.x = xRate * speed;
-            transform.localScale = new Vector2(xRate, 1f);
+            transform.localScale = new Vector2(xRate * 2f, 2f);
         } else {
             vect.x = 0f;
         }
 
-        if (situation == Situation.GROUND && rb.velocity.y < 0f) {
+        // 床から落ちた場合 / 天井に当たった場合
+        if (situation == Situation.GROUND && rb.velocity.y < -0.01f) {
+            situation = Situation.FALL;
+            jumpTimer = 0.1f;   
+        } else if (situation == Situation.RISE && isCeiling) {
             situation = Situation.FALL;
             jumpTimer = 0.1f;
-        } else if (situation == Situation.RISE && rb.velocity.y == 0f && jumpTimer > 0.03f) {
-            situation = Situation.FALL;
-            jumpTimer = 0f;
         }
 
         switch (situation) {
@@ -115,8 +128,12 @@ public class PlayerMovement : MonoBehaviour
                 break;
 
             default:
+                Debug.Log("default");
                 break;
         }
+
+        //Debug.Log(jumpKey);
+        //Debug.Log(situation);
 
         rb.velocity = vect;
     }
