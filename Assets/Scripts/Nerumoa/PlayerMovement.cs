@@ -9,26 +9,29 @@ public class PlayerMovement : MonoBehaviour
     bool isGround;
     bool isCeiling;
 
-    float xRate;
     [SerializeField] float speed = 8f;
+    float xRate;
     bool isMove = false;
 
+    int jumpCount = 0;
     float jumpTimer = 0f;
     const float jumpPower = 18f;
     const float gravity = 120f;
     bool jumpKey = false;
     bool jumpKeyLock = false;
+    bool canDoubleJump = true;
 
 
     Rigidbody2D rb;
     Vector2 vect;
-    Situation situation = Situation.GROUND;
+    Situation sitn = Situation.GROUND;
 
     enum Situation
     {
         GROUND,
         RISE,
-        FALL
+        RISE_TWO,
+        FALL,
     }
 
     // Start is called before the first frame update
@@ -48,6 +51,12 @@ public class PlayerMovement : MonoBehaviour
             isMove = false;
         }
 
+        // ジャンプしようとした回数
+        if (Input.GetKeyDown("space")) {
+            jumpCount++;
+        }
+
+        // ジャンプの長さ
         if (Input.GetKey("space")) {
             if (!jumpKeyLock) {
                 jumpKey = true;
@@ -66,10 +75,12 @@ public class PlayerMovement : MonoBehaviour
         isCeiling = rb.IsTouching(ceiling);
 
         // 地面と接触した場合
-        if (situation == Situation.FALL && isGround) {
-            situation = Situation.GROUND;
+        if (sitn == Situation.FALL && isGround) {
+            sitn = Situation.GROUND;
+            jumpCount = 0;
             jumpTimer = 0f;
             jumpKeyLock = true;
+            canDoubleJump = true;
         }
     }
 
@@ -85,24 +96,31 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // 床から落ちた場合 / 天井に当たった場合
-        if (situation == Situation.GROUND && rb.velocity.y < -0.01f) {
-            situation = Situation.FALL;
+        if (sitn == Situation.GROUND && rb.velocity.y < -0.01f) {
+            sitn = Situation.FALL;
+            jumpCount++;
             jumpTimer = 0.1f;   
-        } else if (situation == Situation.RISE && isCeiling) {
-            situation = Situation.FALL;
+        } else if ((sitn == Situation.RISE || sitn == Situation.RISE_TWO) && isCeiling) {
+            sitn = Situation.FALL;
             jumpTimer = 0.1f;
         }
 
-        switch (situation) {
+        if (jumpCount == 2 && canDoubleJump) {
+            sitn = Situation.RISE_TWO;
+            jumpTimer = 0.05f;
+            canDoubleJump = false;
+        }
+
+        switch (sitn) {
             case Situation.GROUND:
                 if (jumpKey) {
-                    situation = Situation.RISE;
+                    sitn = Situation.RISE;
                 }
                 break;
 
             case Situation.RISE:
                 jumpTimer += Time.deltaTime;
-                if (jumpKey || jumpTimer < 0.03f) {
+                if ((jumpKey || jumpTimer < 0.03f) && jumpCount < 2) {
                     vect.y = jumpPower;
                     vect.y -= gravity * Mathf.Pow(jumpTimer, 2f);
                 } else {
@@ -112,7 +130,25 @@ public class PlayerMovement : MonoBehaviour
                 }
 
                 if (vect.y < 0f) {
-                    situation = Situation.FALL;
+                    sitn = Situation.FALL;
+                    vect.y = 0f;
+                    jumpTimer = 0.1f;
+                }
+                break;
+
+            case Situation.RISE_TWO:
+                jumpTimer += Time.deltaTime;
+                if ((jumpKey || jumpTimer < 0.03f) && jumpCount < 3) {
+                    vect.y = jumpPower / 1.2f;
+                    vect.y -= gravity * Mathf.Pow(jumpTimer, 2.1f);
+                } else {
+                    jumpTimer += Time.deltaTime;
+                    vect.y = jumpPower / 1.2f;
+                    vect.y -= gravity * Mathf.Pow(jumpTimer, 1.4f);
+                }
+
+                if (vect.y < 0f) {
+                    sitn = Situation.FALL;
                     vect.y = 0f;
                     jumpTimer = 0.1f;
                 }
@@ -120,9 +156,9 @@ public class PlayerMovement : MonoBehaviour
 
             case Situation.FALL:
                 jumpTimer += Time.deltaTime;
-                vect.y = 0f;
-                vect.y = -(gravity * Mathf.Pow(jumpTimer, 2f));
-                if (vect.y < -15f) {
+                if (rb.velocity.y >= -15f) {
+                    vect.y = -(gravity * Mathf.Pow(jumpTimer, 2f));
+                } else {
                     vect.y = -15f;
                 }
                 break;
@@ -133,7 +169,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         //Debug.Log(jumpKey);
-        //Debug.Log(situation);
+        //Debug.Log(sitn);
 
         rb.velocity = vect;
     }
