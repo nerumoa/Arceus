@@ -37,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Application.targetFrameRate = 60;
         //Time.timeScale = 0.1f;
         rb = GetComponent<Rigidbody2D>();
     }
