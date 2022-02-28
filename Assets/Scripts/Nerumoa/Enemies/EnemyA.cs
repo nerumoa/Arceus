@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyDamage : MonoBehaviour, IReceiveDamageEnemy
+public class EnemyA : MonoBehaviour, IReceiveDamageEnemy
 {
     float HP = 100f;
 
@@ -13,6 +13,15 @@ public class EnemyDamage : MonoBehaviour, IReceiveDamageEnemy
 
         if (HP <= 0) {
             Destroy(gameObject);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D col)
+    {
+        // Interface‚ðŽæ“¾
+        var hit = col.gameObject.GetComponent<IReceiveDamagePlayer>();
+        if (hit != null) {
+            hit.ReceiveDamage(5f);
         }
     }
 }

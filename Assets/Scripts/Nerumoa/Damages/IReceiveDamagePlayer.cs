@@ -5,7 +5,7 @@ using UnityEngine;
 /// <summary>
 /// Enemy‚Ìƒ_ƒ[ƒW”»’è
 /// </summary>
-public interface IReceiveDamageEnemy
+public interface IReceiveDamagePlayer
 {
     void ReceiveDamage(float damage);
 }

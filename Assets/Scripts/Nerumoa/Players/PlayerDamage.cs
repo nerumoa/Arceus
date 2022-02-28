@@ -2,9 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAttack : MonoBehaviour
+public class PlayerDamage : MonoBehaviour, IReceiveDamagePlayer
 {
-    // プレイヤーの攻撃以外の情報も加える？
+    float HP = 100f;
+
+    public void ReceiveDamage(float damage)
+    {
+        HP -= damage;
+        Debug.Log("Player は" + damage + "ダメージ食らった\nHP:" + HP);
+    }
+
 
     private void OnTriggerEnter2D(Collider2D col)
     {
