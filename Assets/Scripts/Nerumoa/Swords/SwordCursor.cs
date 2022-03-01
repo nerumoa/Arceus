@@ -18,8 +18,8 @@ public class SwordCursor : MonoBehaviour
 
     private void Update()
     {
-        angle = GetAngle(transform.position, cursor.transform.position);
-        transform.rotation = Quaternion.Euler(0, 0, angle);
+        angle = GetAngle(player.transform.position, cursor.transform.position);
+        transform.rotation = Quaternion.Euler(0, 0, angle + 90f);
     }
 
     private float GetAngle(Vector2 start, Vector2 target)
@@ -28,6 +28,16 @@ public class SwordCursor : MonoBehaviour
         float rad = Mathf.Atan2(dt.y, dt.x);
         float degree = rad * Mathf.Rad2Deg;
         degree -= 90f;
+        if (degree < 0f) {
+            degree += 360f;
+        }
+
+        if (degree < 180f) {
+            degree += 180f;
+        }
+
+
+        Debug.Log(degree);
 
         return degree;
     }

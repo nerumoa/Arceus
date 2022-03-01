@@ -91,7 +91,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (isMove) {
             vect.x = xRate * speed;
-            transform.localScale = new Vector2(xRate * 2f, 2f);
+            //transform.localScale = new Vector2(xRate * 2f, 2f);
         } else {
             vect.x = 0f;
         }

@@ -10,6 +10,7 @@ public class RotateCursor : MonoBehaviour
     Vector3 distance = new Vector3(0f, 1.25f, 0f);
 
     float angle;
+    int dir;
 
     private void Start()
     {
@@ -24,7 +25,11 @@ public class RotateCursor : MonoBehaviour
         transform.position = player.transform.position + Quaternion.Euler(0f, 0f, angle) * distance;
         transform.rotation = Quaternion.Euler(0, 0, angle);
 
-        Debug.Log(angle);
+        dir = angle < 180f 
+            ? -1
+            : 1;
+        player.transform.localScale = new Vector2(2f * dir, 2f);
+
     }
 
     private float GetAngle(Vector2 start, Vector2 target)
@@ -33,6 +38,9 @@ public class RotateCursor : MonoBehaviour
         float rad = Mathf.Atan2(dt.y, dt.x);
         float degree = rad * Mathf.Rad2Deg;
         degree -= 90f;
+        if (degree < 0f) {
+            degree += 360f;
+        }
 
         return degree;
     }
