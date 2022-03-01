@@ -19,7 +19,10 @@ public class CursorMove : MonoBehaviour
     float rotation = 0;
     private Animator anim = null;
 
-
+    public float GetRotation
+    {
+        get { return rotation; }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -79,10 +82,5 @@ public class CursorMove : MonoBehaviour
         target = Camera.main.ScreenToWorldPoint(new Vector3(mouse.x, mouse.y, 10));
 
         this.transform.position = target;
-    }
-
-    public float GetRotation
-    {
-        get { return rotation; }
     }
 }

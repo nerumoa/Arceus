@@ -38,7 +38,6 @@ public class PlayerMovement : MonoBehaviour
     void Start()
     {
         Application.targetFrameRate = 60;
-        //Time.timeScale = 0.1f;
         rb = GetComponent<Rigidbody2D>();
     }
 
@@ -50,6 +49,15 @@ public class PlayerMovement : MonoBehaviour
             isMove = true;
         } else {
             isMove = false;
+        }
+
+        // 地面と接触した場合
+        if (sitn == Situation.FALL && isGround) {
+            sitn = Situation.GROUND;
+            jumpCount = 0;
+            jumpTimer = 0f;
+            jumpKeyLock = true;
+            canDoubleJump = true;
         }
 
         // ジャンプしようとした回数
@@ -69,20 +77,8 @@ public class PlayerMovement : MonoBehaviour
             jumpKeyLock = false;
         }
 
-        // Jump二度押しを出来ないようにする
-        // 二段ジャンプを参考にすれば良い？
-
         isGround = rb.IsTouching(ground);
         isCeiling = rb.IsTouching(ceiling);
-
-        // 地面と接触した場合
-        if (sitn == Situation.FALL && isGround) {
-            sitn = Situation.GROUND;
-            jumpCount = 0;
-            jumpTimer = 0f;
-            jumpKeyLock = true;
-            canDoubleJump = true;
-        }
     }
 
     private void FixedUpdate()

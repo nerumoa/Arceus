@@ -2,13 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RotateCursor : MonoBehaviour
+public class Sword : MonoBehaviour
 {
     float angle;
 
     GameObject player;
     DirectionToCursor dtc;
-    Vector3 distance = new Vector3(0f, 1.25f, 0f);
 
     private void Start()
     {
@@ -19,9 +18,9 @@ public class RotateCursor : MonoBehaviour
     private void Update()
     {
         angle = dtc.GetAngle;
-
-        //　RCの位置 = playerの位置 ＋ RCの角度 ×　playerからの距離
-        transform.position = player.transform.position + Quaternion.Euler(0f, 0f, angle) * distance;
-        transform.rotation = Quaternion.Euler(0, 0, angle);
+        if (angle < 180f) {
+            angle += 180f;
+        }
+        transform.rotation = Quaternion.Euler(0, 0, angle + 90f);
     }
 }
