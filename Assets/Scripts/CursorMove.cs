@@ -80,4 +80,9 @@ public class CursorMove : MonoBehaviour
 
         this.transform.position = target;
     }
+
+    public float GetRotation
+    {
+        get { return rotation; }
+    }
 }
