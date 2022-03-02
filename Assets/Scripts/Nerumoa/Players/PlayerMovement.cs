@@ -34,14 +34,12 @@ public class PlayerMovement : MonoBehaviour
         FALL,
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         Application.targetFrameRate = 60;
         rb = GetComponent<Rigidbody2D>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         xRate = Input.GetAxisRaw("Horizontal");
@@ -87,7 +85,6 @@ public class PlayerMovement : MonoBehaviour
 
         if (isMove) {
             vect.x = xRate * speed;
-            //transform.localScale = new Vector2(xRate * 2f, 2f);
         } else {
             vect.x = 0f;
         }

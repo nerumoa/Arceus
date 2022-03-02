@@ -11,14 +11,4 @@ public class PlayerDamage : MonoBehaviour, IReceiveDamagePlayer
         HP -= damage;
         Debug.Log("Player は" + damage + "ダメージ食らった\nHP:" + HP);
     }
-
-
-    private void OnTriggerEnter2D(Collider2D col)
-    {
-        // Interfaceを取得
-        var hit = col.gameObject.GetComponent<IReceiveDamageEnemy>();
-        if (hit != null) {
-            hit.ReceiveDamage(10f);
-        }
-    }
 }

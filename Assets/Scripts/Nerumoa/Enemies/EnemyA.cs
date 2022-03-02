@@ -16,7 +16,7 @@ public class EnemyA : MonoBehaviour, IReceiveDamageEnemy
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D col)
+    private void OnCollisionEnter2D(Collision2D col)
     {
         // Interface‚ðŽæ“¾
         var hit = col.gameObject.GetComponent<IReceiveDamagePlayer>();
