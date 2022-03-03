@@ -150,9 +150,8 @@ public class PlayerMovement : MonoBehaviour
 
             case Situation.FALL:
                 jumpTimer += Time.deltaTime;
-                if (rb.velocity.y >= -15f) {
-                    vect.y = -(gravity * Mathf.Pow(jumpTimer, 2f));
-                } else {
+                vect.y = -(gravity * Mathf.Pow(jumpTimer, 2f));
+                if (vect.y < -15f) {
                     vect.y = -15f;
                 }
                 break;
