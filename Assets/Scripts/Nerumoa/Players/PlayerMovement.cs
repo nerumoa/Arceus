@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement: MonoBehaviour
 {
     [SerializeField] private ContactFilter2D ground = default;
     [SerializeField] private ContactFilter2D ceiling = default;
@@ -11,19 +11,18 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] float speed = 8f;
     float xRate;
-    bool isMove = false;
 
     int jumpCount = 0;
     float jumpTimer = 0f;
     const float jumpPower = 18f;
     const float gravity = 120f;
-    bool jumpKey = false;
-    bool jumpKeyLock = false;
+    bool isJumpKey = false;
+    bool lockJumpKey = false;
     bool canDoubleJump = true;
-
 
     Rigidbody2D rb;
     Vector2 vect;
+    PlayerController pc;
     Situation sitn = Situation.GROUND;
 
     enum Situation
@@ -34,45 +33,40 @@ public class PlayerMovement : MonoBehaviour
         FALL,
     }
 
-    void Start()
+    void Awake()
     {
-        Application.targetFrameRate = 60;
         rb = GetComponent<Rigidbody2D>();
+        pc = GetComponent<PlayerController>();
     }
 
     void Update()
     {
-        xRate = Input.GetAxisRaw("Horizontal");
-        if (xRate != 0) {
-            isMove = true;
-        } else {
-            isMove = false;
-        }
+        xRate = pc.GetXRate;
 
         // 地面と接触した場合
         if (sitn == Situation.FALL && isGround) {
             sitn = Situation.GROUND;
             jumpCount = 0;
             jumpTimer = 0f;
-            jumpKeyLock = true;
+            lockJumpKey = true;
             canDoubleJump = true;
         }
 
         // ジャンプしようとした回数
-        if (Input.GetKeyDown("space")) {
+        if (pc.GetIsSpace) {
             jumpCount++;
         }
 
         // ジャンプの長さ
-        if (Input.GetKey("space")) {
-            if (!jumpKeyLock) {
-                jumpKey = true;
+        if (pc.GetBeingSpace) {
+            if (!lockJumpKey) {
+                isJumpKey = true;
             } else {
-                jumpKey = false;
+                isJumpKey = false;
             }
         } else {
-            jumpKey = false;
-            jumpKeyLock = false;
+            isJumpKey = false;
+            lockJumpKey = false;
         }
 
         isGround = rb.IsTouching(ground);
@@ -81,9 +75,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        //vect = Vector2.zero;
-
-        if (isMove) {
+        // 横移動
+        if (xRate != 0) {
             vect.x = xRate * speed;
         } else {
             vect.x = 0f;
@@ -107,14 +100,14 @@ public class PlayerMovement : MonoBehaviour
 
         switch (sitn) {
             case Situation.GROUND:
-                if (jumpKey) {
+                if (isJumpKey) {
                     sitn = Situation.RISE;
                 }
                 break;
 
             case Situation.RISE:
                 jumpTimer += Time.deltaTime;
-                if ((jumpKey || jumpTimer < 0.03f) && jumpCount < 2) {
+                if ((isJumpKey || jumpTimer < 0.03f) && jumpCount < 2) {
                     vect.y = jumpPower;
                     vect.y -= gravity * Mathf.Pow(jumpTimer, 2f);
                 } else {
@@ -132,7 +125,7 @@ public class PlayerMovement : MonoBehaviour
 
             case Situation.RISE_TWO:
                 jumpTimer += Time.deltaTime;
-                if ((jumpKey || jumpTimer < 0.03f) && jumpCount < 3) {
+                if ((isJumpKey || jumpTimer < 0.03f) && jumpCount < 3) {
                     vect.y = jumpPower / 1.2f;
                     vect.y -= gravity * Mathf.Pow(jumpTimer, 2.1f);
                 } else {
@@ -160,9 +153,6 @@ public class PlayerMovement : MonoBehaviour
                 Debug.Log("default");
                 break;
         }
-
-        //Debug.Log(jumpKey);
-        //Debug.Log(sitn);
 
         rb.velocity = vect;
     }

@@ -7,7 +7,7 @@ public class EnemyA : MonoBehaviour, IReceiveDamageEnemy
     float HP = 100f;
     new AudioSource audio;
 
-    private void Start()
+    private void Awake()
     {
         audio = GetComponent<AudioSource>();
     }

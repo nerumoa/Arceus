@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// Enemyのダメージ判定
+/// Playerのダメージ判定
 /// </summary>
 public interface IReceiveDamagePlayer
 {
