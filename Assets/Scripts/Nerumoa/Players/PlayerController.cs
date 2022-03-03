@@ -7,7 +7,8 @@ public class PlayerController : MonoBehaviour
     float xRate;
     bool isSpace;
     bool beingSpace;
-    bool isZkey;
+    bool isLMouse;
+    bool isRMouse;
 
 
     public float GetXRate
@@ -25,9 +26,14 @@ public class PlayerController : MonoBehaviour
         get { return beingSpace; }
     }
 
-    public bool GetIsZkey
+    public bool GetIsLMouse
     {
-        get { return isZkey; }
+        get { return isLMouse; }
+    }
+
+    public bool GetIsRMouse
+    {
+        get { return isRMouse; }
     }
 
     // Update is called once per frame
@@ -36,6 +42,7 @@ public class PlayerController : MonoBehaviour
         xRate       = Input.GetAxisRaw("Horizontal");
         isSpace     = Input.GetKeyDown("space");
         beingSpace  = Input.GetKey("space");
-        isZkey      = Input.GetKeyDown(KeyCode.Z);
+        isLMouse    = Input.GetMouseButtonDown(0);
+        isRMouse    = Input.GetMouseButtonDown(1);
     }
 }

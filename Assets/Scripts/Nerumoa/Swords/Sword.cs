@@ -33,7 +33,7 @@ public class Sword : MonoBehaviour
     {
         angle = dtc.GetAngle;
 
-        if (pc.GetIsZkey) {
+        if (pc.GetIsLMouse) {
             VerticalAttack();
         }
     }

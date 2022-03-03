@@ -20,6 +20,8 @@ public class PlayerMovement: MonoBehaviour
     bool lockJumpKey = false;
     bool canDoubleJump = true;
 
+    bool isRMouse;
+
     Rigidbody2D rb;
     Vector2 vect;
     PlayerController pc;
@@ -43,6 +45,10 @@ public class PlayerMovement: MonoBehaviour
     {
         xRate = pc.GetXRate;
 
+        if (pc.GetIsRMouse) {
+            isRMouse = true;
+        }
+
         // 地面と接触した場合
         if (sitn == Situation.FALL && isGround) {
             sitn = Situation.GROUND;
@@ -59,11 +65,8 @@ public class PlayerMovement: MonoBehaviour
 
         // ジャンプの長さ
         if (pc.GetBeingSpace) {
-            if (!lockJumpKey) {
-                isJumpKey = true;
-            } else {
-                isJumpKey = false;
-            }
+            // ロックが掛かっているならばJump判定を消す
+            isJumpKey = !lockJumpKey;
         } else {
             isJumpKey = false;
             lockJumpKey = false;
@@ -80,6 +83,11 @@ public class PlayerMovement: MonoBehaviour
             vect.x = xRate * speed;
         } else {
             vect.x = 0f;
+        }
+
+        if (isRMouse) {
+            vect.x = xRate * speed * 10f;
+            isRMouse = false;
         }
 
         // 床から落ちた場合 / 天井に当たった場合
