@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class EnemyA : MonoBehaviour, IReceiveDamageEnemy
 {
@@ -28,10 +29,10 @@ public class EnemyA : MonoBehaviour, IReceiveDamageEnemy
 
     private void OnCollisionEnter2D(Collision2D col)
     {
-        // Interfaceを取得
-        var hit = col.gameObject.GetComponent<IReceiveDamagePlayer>();
-        if (hit != null) {
-            hit.ReceiveDamage(5f);
-        }
+        // Interfaceを継承しているComponentのMethodを呼び出し
+        ExecuteEvents.Execute<IReceiveDamagePlayer>(
+                    target: col.gameObject,     // 呼び出す対象のObject
+                    eventData: null,        // イベントデータ（モジュール等の情報）
+                    functor: (target, eventData) => target.ReceiveDamage(10f));     // 操作
     }
 }

@@ -43,9 +43,9 @@ public class PlayerMovement: MonoBehaviour
 
     void Update()
     {
-        xRate = pc.GetXRate;
+        xRate = pc.GetXRate();
 
-        if (pc.GetIsRMouse) {
+        if (pc.GetIsRMouse()) {
             isRMouse = true;
         }
 
@@ -59,12 +59,12 @@ public class PlayerMovement: MonoBehaviour
         }
 
         // ジャンプしようとした回数
-        if (pc.GetIsSpace) {
+        if (pc.GetIsSpace()) {
             jumpCount++;
         }
 
         // ジャンプの長さ
-        if (pc.GetBeingSpace) {
+        if (pc.GetBeingSpace()) {
             // ロックが掛かっているならばJump判定を消す
             isJumpKey = !lockJumpKey;
         } else {

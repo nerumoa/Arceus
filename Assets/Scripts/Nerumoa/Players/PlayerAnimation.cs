@@ -16,6 +16,6 @@ public class PlayerAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        anim.SetFloat("walk", Mathf.Abs(pc.GetXRate));
+        anim.SetFloat("walk", Mathf.Abs(pc.GetXRate()));
     }
 }

@@ -4,45 +4,28 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    float xRate;
-    bool isSpace;
-    bool beingSpace;
-    bool isLMouse;
-    bool isRMouse;
-
-
-    public float GetXRate
+    public float GetXRate()
     {
-        get { return xRate; }
+        return Input.GetAxisRaw("Horizontal");
     }
 
-    public bool GetIsSpace
+    public bool GetIsSpace()
     {
-        get { return isSpace; }
+        return Input.GetKeyDown("space");
     }
 
-    public bool GetBeingSpace
+    public bool GetBeingSpace()
     {
-        get { return beingSpace; }
+        return Input.GetKey("space");
     }
 
-    public bool GetIsLMouse
+    public bool GetIsLMouse()
     {
-        get { return isLMouse; }
+        return Input.GetMouseButtonDown(0);
     }
 
-    public bool GetIsRMouse
+    public bool GetIsRMouse()
     {
-        get { return isRMouse; }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        xRate       = Input.GetAxisRaw("Horizontal");
-        isSpace     = Input.GetKeyDown("space");
-        beingSpace  = Input.GetKey("space");
-        isLMouse    = Input.GetMouseButtonDown(0);
-        isRMouse    = Input.GetMouseButtonDown(1);
+        return Input.GetMouseButtonDown(1);
     }
 }

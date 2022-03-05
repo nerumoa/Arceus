@@ -1,11 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Enemy‚Ìƒ_ƒ[ƒW”»’è
 /// </summary>
-public interface IReceiveDamageEnemy
+public interface IReceiveDamageEnemy : IEventSystemHandler
 {
     void ReceiveDamage(float damage);
 }
